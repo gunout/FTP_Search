@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche Google</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            background-color: #0d0d0d;
+            color: #f0f0f0;
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.7);
+            overflow: hidden;
+        }
+
+        .matrix-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .matrix {
+            font-size: 20px;
+            color: rgba(255, 0, 128, 0.9);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: matrix 5s infinite linear;
+            position: relative;
+        }
+
+        .matrix span {
+            display: inline-block;
+            position: relative;
+            animation: drop 0.5s infinite linear;
+        }
+
+        @keyframes drop {
+            0% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(10px); opacity: 0.7; }
+            100% { transform: translateY(0); opacity: 0; }
+        }
+
+        @keyframes matrix {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(-100%); }
+        }
+
+        h1 {
+            color: #ff007f;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(255, 0, 128, 0.9);
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 2px solid #ff007f;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 0, 128, 0.1);
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.5);
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            margin-right: 10px;
+            border: 2px solid #ff007f;
+            border-radius: 5px;
+            background-color: rgba(255, 0, 128, 0.2);
+            color: #ff007f;
+            transition: background-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            background-color: rgba(255, 0, 128, 0.3);
+            outline: none;
+        }
+
+        input[type="submit"] {
+            padding: 10px 15px;
+            background-color: #ff007f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 0 10px rgba(255, 0, 128, 0.7);
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e6007e;
+        }
+    </style>
+    <script>
+        function getFirstWords(term, count) {
+            return term.split(' ').slice(0, count).join(' ');
+        }
+
+        function formatSearchTerm() {
+            var searchTerm = document.getElementById('googleSearchTerm').value;
+            var firstWords = getFirstWords(searchTerm, 10);
+            var formattedTerm = 'ftp -inurl:(htm|html|php|pls|txt|jpg|pdf) intitle:index.of "last modified" "' + firstWords.toLowerCase() + '" (|com|net|org)'; // Convertir en minuscules
+            document.getElementById('googleSearchTerm').value = formattedTerm.toLowerCase(); // Convertir en minuscules
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <div class="matrix-background">
+        <div class="matrix">
+            0100100001101001011100100110010101110010001000000110111101100111011011110110111101100011011100100110001001101111011101010010000001101101010110000101101110011101000110111101101101
+        </div>
+        <div class="matrix">
+            01001101011000010111001101100001011011100111010001100101011001000111001001100101011010010110111101101101011001010111001101101001011010010110111000101110011011110110110000101101
+        </div>
+        <div class="matrix">
+            01101100011001010010000001101011011011110111001101100001011001010111001101110011011101010010000001101110011001010111001001101000011010000111001000101100011001110110100101110100
+        </div>
+    </div>
+
+    <h1>Recherche Google</h1>
+    <form id="googleSearchForm" action="https://www.google.com/search" method="GET" onsubmit="return formatSearchTerm()" target="_blank">
+        <input type="text" id="googleSearchTerm" name="q" placeholder="Entrez un terme de recherche Google" required>
+        <input type="submit" value="Rechercher Google">
+    </form>
+
+    <script>
+        const matrixDivs = document.querySelectorAll('.matrix');
+        matrixDivs.forEach(matrixDiv => {
+            const text = matrixDiv.textContent;
+            matrixDiv.innerHTML = text.split('').map(char => `<span>${char}</span>`).join('');
+        });
+    </script>
+</body>
+</html>
