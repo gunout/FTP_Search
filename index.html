@@ -98,18 +98,45 @@
         input[type="submit"]:hover {
             background-color: #e6007e;
         }
+
+        .radio-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .radio-group label {
+            color: #ff007f;
+            margin-right: 15px;
+            cursor: pointer;
+        }
     </style>
     <script>
+        // Fonction pour extraire les premiers mots du terme de recherche
         function getFirstWords(term, count) {
             return term.split(' ').slice(0, count).join(' ');
         }
 
+        // Fonction pour formater le terme de recherche avant l'envoi
         function formatSearchTerm() {
             var searchTerm = document.getElementById('googleSearchTerm').value;
-            var firstWords = getFirstWords(searchTerm, 10);
-            var formattedTerm = 'ftp -inurl:(htm|html|php|pls|txt|jpg|pdf) intitle:index.of "last modified" "' + firstWords.toLowerCase() + '" (|com|net|org)'; // Convertir en minuscules
-            document.getElementById('googleSearchTerm').value = formattedTerm.toLowerCase(); // Convertir en minuscules
-            return true;
+            var firstWords = getFirstWords(searchTerm, 10);  // Extraire les 10 premiers mots
+            var searchType = document.querySelector('input[name="searchType"]:checked').value;  // Récupérer le type de recherche sélectionné
+            
+            var formattedTerm;
+
+            // Formater l'URL selon le type de recherche choisi (vidéo, musique ou livre)
+            if (searchType === 'video') {
+                formattedTerm = 'https://www.google.com/search?q="' + firstWords.toLowerCase() + '" -inurl:(htm|html|php|pls|txt)%20intitle:index.of%20%22last%20modified%22%20(|mkv|mp4|avi|webm|flv|mov|mpg|mpeg)';
+            } else if (searchType === 'music') {
+                formattedTerm = 'https://www.google.com/search?q="' + firstWords.toLowerCase() + '" -inurl:(htm|html|php|pls|txt)%20intitle:index.of%20%22last%20modified%22%20(mp3|wav|m4a|ogg|wma|flac)';
+            } else if (searchType === 'books') {
+                formattedTerm = 'https://www.google.com/search?q="' + firstWords.toLowerCase() + '" -inurl:(htm|html|php|pls|txt)%20intitle:index.of%20%22last%20modified%22%20(|epub|pdf)';
+            }
+
+            document.getElementById('googleSearchTerm').value = formattedTerm; // Remplacer la valeur du champ de texte par l'URL formatée
+            window.open(formattedTerm, '_blank');  // Ouvrir l'URL formatée dans un nouvel onglet
+            return false;  // Empêcher l'envoi du formulaire traditionnel
         }
     </script>
 </head>
@@ -127,8 +154,22 @@
     </div>
 
     <h1>FTP Recherche Google</h1>
-    <form id="googleSearchForm" action="https://www.google.com/search" method="GET" onsubmit="return formatSearchTerm()" target="_blank">
+    <form id="googleSearchForm" onsubmit="return formatSearchTerm()">
         <input type="text" id="googleSearchTerm" name="q" placeholder="Entrez un terme de recherche Google" required>
+        
+        <!-- Groupe de boutons radio pour choisir entre vidéo, musique ou livre -->
+        <div class="radio-group">
+            <label>
+                <input type="radio" name="searchType" value="video" checked> Vidéo
+            </label>
+            <label>
+                <input type="radio" name="searchType" value="music"> Musique
+            </label>
+            <label>
+                <input type="radio" name="searchType" value="books"> Livres
+            </label>
+        </div>
+        
         <input type="submit" value="Rechercher Google">
     </form>
 
@@ -141,3 +182,4 @@
     </script>
 </body>
 </html>
+
