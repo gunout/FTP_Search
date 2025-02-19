@@ -134,7 +134,7 @@
                 formattedTerm = 'https://www.google.com/search?q="' + firstWords.toLowerCase() + '" -inurl:(htm|html|php|pls|txt)%20intitle:index.of%20%22last%20modified%22%20(|epub|pdf)';
             }
 
-            document.getElementById('googleSearchTerm').value = formattedTerm; // Remplacer la valeur du champ de texte par l'URL formatée
+            document.getElementById('googleSearchTerm').value = ""; // Vider le champ de recherche
             window.open(formattedTerm, '_blank');  // Ouvrir l'URL formatée dans un nouvel onglet
             return false;  // Empêcher l'envoi du formulaire traditionnel
         }
